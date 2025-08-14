@@ -1,0 +1,92 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Modern portfolio and blog with pixel art aesthetics" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    
+    <!-- Pixel Art Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <title>{title}</title>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Portfolio & Blog",
+        "description": "Modern portfolio and blog website with pixel art aesthetics",
+        "url": "/"
+      }
+    </script>
+  </head>
+  <body class="bg-primary text-secondary font-sans min-h-screen">
+    <slot />
+    
+    <style is:global>
+      html {
+        scroll-behavior: smooth;
+      }
+      
+      body {
+        image-rendering: pixelated;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: crisp-edges;
+      }
+      
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: #404040;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: #00FF41;
+        border-radius: 0;
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: #FF073A;
+      }
+      
+      /* Focus styles for accessibility */
+      *:focus-visible {
+        outline: 2px solid #00FF41;
+        outline-offset: 2px;
+      }
+      
+      /* Button hover effects */
+      .pixel-button {
+        transition: all 0.1s steps(3);
+        image-rendering: pixelated;
+      }
+      
+      .pixel-button:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 2px 2px 0 #00FF41;
+      }
+      
+      .pixel-button:active {
+        transform: translate(0, 0);
+        box-shadow: none;
+      }
+    </style>
+  </body>
+</html>

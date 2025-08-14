@@ -1,0 +1,147 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getProjects } from '../../lib/notion';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map(project => ({
+    params: { id: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+---
+
+<Layout title={`${project.title} - Projects`} description={project.description}>
+  <div class="min-h-screen flex flex-col">
+    <Header />
+    
+    <main class="flex-1 py-pixel-4 px-4">
+      <article class="container mx-auto max-w-4xl">
+        <!-- Back button -->
+        <a 
+          href="/projects" 
+          class="pixel-button bg-transparent text-accent font-pixel text-xs px-pixel-2 py-pixel border border-accent inline-block mb-pixel-3"
+        >
+          &lt; BACK TO PROJECTS
+        </a>
+        
+        <!-- Project Header -->
+        <header class="mb-pixel-4">
+          {project.image && (
+            <div class="aspect-video bg-gray-dark border-2 border-gray-pixel mb-pixel-3 overflow-hidden">
+              <img 
+                src={project.image} 
+                alt={project.title}
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          )}
+          
+          <div class="flex flex-wrap gap-pixel mb-pixel-2">
+            {project.category && (
+              <span class="bg-accent text-primary font-pixel text-xs px-2 py-1">
+                {project.category.toUpperCase()}
+              </span>
+            )}
+            {project.featured && (
+              <span class="bg-neon text-secondary font-pixel text-xs px-2 py-1">
+                FEATURED
+              </span>
+            )}
+          </div>
+          
+          <h1 class="font-pixel text-base md:text-lg text-secondary mb-pixel-2">
+            {project.title}
+          </h1>
+          
+          {project.date && (
+            <time class="font-pixel text-xs text-gray-pixel" datetime={project.date}>
+              {new Date(project.date).toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              })}
+            </time>
+          )}
+        </header>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-pixel-4">
+          <!-- Project Details -->
+          <div class="lg:col-span-2">
+            <div class="pixel-card p-pixel-3 mb-pixel-3">
+              <h2 class="font-pixel text-sm text-accent mb-pixel-2">
+                &gt; DESCRIPTION_
+              </h2>
+              <p class="font-mono text-gray-light text-sm leading-relaxed">
+                {project.description || 'Project description will be loaded from Notion.'}
+              </p>
+            </div>
+          </div>
+          
+          <!-- Sidebar -->
+          <div class="lg:col-span-1">
+            <!-- Technologies -->
+            {project.technologies && project.technologies.length > 0 && (
+              <div class="pixel-card p-pixel-3 mb-pixel-3">
+                <h3 class="font-pixel text-xs text-accent mb-pixel-2">
+                  &gt; TECHNOLOGIES_
+                </h3>
+                <div class="flex flex-wrap gap-1">
+                  {project.technologies.map(tech => (
+                    <span class="bg-gray-dark border border-gray-pixel text-gray-light font-pixel text-xs px-1 py-1">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            <!-- Links -->
+            <div class="pixel-card p-pixel-3">
+              <h3 class="font-pixel text-xs text-accent mb-pixel-2">
+                &gt; LINKS_
+              </h3>
+              <div class="space-y-pixel">
+                {project.demo && (
+                  <a 
+                    href={project.demo} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="pixel-button bg-accent text-primary font-pixel text-xs px-pixel-2 py-pixel border-2 border-accent w-full text-center block"
+                  >
+                    LIVE DEMO
+                  </a>
+                )}
+                {project.github && (
+                  <a 
+                    href={project.github} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="pixel-button bg-transparent text-accent font-pixel text-xs px-pixel-2 py-pixel border-2 border-accent w-full text-center block"
+                  >
+                    VIEW CODE
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </main>
+    
+    <Footer />
+  </div>
+</Layout>
+
+<style>
+  .pixel-card {
+    @apply bg-primary border-2 border-gray-pixel;
+    image-rendering: pixelated;
+    box-shadow: 4px 4px 0 rgba(128, 128, 128, 0.3);
+  }
+</style>

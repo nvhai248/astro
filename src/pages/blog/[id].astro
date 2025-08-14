@@ -1,0 +1,98 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getBlogPost, getBlogPosts } from '../../lib/notion';
+
+export async function getStaticPaths() {
+  const posts = await getBlogPosts();
+  return posts.map(post => ({
+    params: { id: post.id },
+  }));
+}
+
+const { id } = Astro.params;
+const post = await getBlogPost(id!);
+
+if (!post) {
+  return Astro.redirect('/blog');
+}
+---
+
+<Layout title={`${post.title} - Blog`} description={post.excerpt}>
+  <div class="min-h-screen flex flex-col">
+    <Header />
+    
+    <main class="flex-1 py-pixel-4 px-4">
+      <article class="container mx-auto max-w-3xl">
+        <!-- Back button -->
+        <a 
+          href="/blog" 
+          class="pixel-button bg-transparent text-accent font-pixel text-xs px-pixel-2 py-pixel border border-accent inline-block mb-pixel-3"
+        >
+          &lt; BACK TO BLOG
+        </a>
+        
+        <!-- Post Header -->
+        <header class="mb-pixel-4">
+          {post.image && (
+            <div class="aspect-video bg-gray-dark border-2 border-gray-pixel mb-pixel-3 overflow-hidden">
+              <img 
+                src={post.image} 
+                alt={post.title}
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          )}
+          
+          <div class="flex flex-wrap gap-pixel mb-pixel-2">
+            {post.category && (
+              <span class="bg-accent text-primary font-pixel text-xs px-2 py-1">
+                {post.category.toUpperCase()}
+              </span>
+            )}
+            {post.tags?.map(tag => (
+              <span class="bg-gray-dark border border-gray-pixel text-gray-light font-pixel text-xs px-2 py-1">
+                #{tag.toLowerCase()}
+              </span>
+            ))}
+          </div>
+          
+          <h1 class="font-pixel text-base md:text-lg text-secondary mb-pixel-2">
+            {post.title}
+          </h1>
+          
+          {post.date && (
+            <time class="font-pixel text-xs text-gray-pixel" datetime={post.date}>
+              {new Date(post.date).toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              })}
+            </time>
+          )}
+        </header>
+        
+        <!-- Post Content -->
+        <div class="pixel-card p-pixel-3">
+          <div class="prose prose-invert max-w-none">
+            <div class="font-mono text-gray-light text-sm leading-relaxed whitespace-pre-wrap">
+              {post.content || 'Content not available. Please check Notion integration.'}
+            </div>
+          </div>
+        </div>
+      </article>
+    </main>
+    
+    <Footer />
+  </div>
+</Layout>
+
+<style>
+  .pixel-card {
+    @apply bg-primary border-2 border-gray-pixel;
+    image-rendering: pixelated;
+    box-shadow: 4px 4px 0 rgba(128, 128, 128, 0.3);
+  }
+</style>

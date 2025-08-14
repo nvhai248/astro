@@ -1,0 +1,106 @@
+---
+---
+
+<form 
+  id="contact-form" 
+  class="space-y-pixel-3"
+  action="/api/contact"
+  method="POST"
+>
+  <div>
+    <label for="email" class="block font-pixel text-xs text-secondary mb-pixel">
+      YOUR EMAIL *
+    </label>
+    <input 
+      type="email" 
+      id="email" 
+      name="email" 
+      required 
+      class="w-full bg-gray-dark border-2 border-gray-pixel text-secondary font-mono p-pixel-2 text-sm focus:border-accent focus:outline-none"
+      aria-describedby="email-help"
+    />
+    <p id="email-help" class="sr-only">Enter your email address for us to respond</p>
+  </div>
+  
+  <div>
+    <label for="subject" class="block font-pixel text-xs text-secondary mb-pixel">
+      SUBJECT *
+    </label>
+    <input 
+      type="text" 
+      id="subject" 
+      name="subject" 
+      required 
+      class="w-full bg-gray-dark border-2 border-gray-pixel text-secondary font-mono p-pixel-2 text-sm focus:border-accent focus:outline-none"
+      aria-describedby="subject-help"
+    />
+    <p id="subject-help" class="sr-only">Brief description of your inquiry</p>
+  </div>
+  
+  <div>
+    <label for="message" class="block font-pixel text-xs text-secondary mb-pixel">
+      MESSAGE *
+    </label>
+    <textarea 
+      id="message" 
+      name="message" 
+      required 
+      rows="6"
+      class="w-full bg-gray-dark border-2 border-gray-pixel text-secondary font-mono p-pixel-2 text-sm focus:border-accent focus:outline-none resize-none"
+      aria-describedby="message-help"
+    ></textarea>
+    <p id="message-help" class="sr-only">Your detailed message or inquiry</p>
+  </div>
+  
+  <button 
+    type="submit" 
+    class="pixel-button bg-accent text-primary font-pixel text-xs px-pixel-3 py-pixel-2 border-2 border-accent disabled:opacity-50"
+    aria-describedby="submit-help"
+  >
+    SEND MESSAGE
+  </button>
+  <p id="submit-help" class="sr-only">Submit your contact form</p>
+  
+  <div id="form-status" class="hidden" aria-live="polite" aria-atomic="true"></div>
+</form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('contact-form') as HTMLFormElement;
+    const status = document.getElementById('form-status') as HTMLElement;
+    const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'SENDING...';
+      status.className = 'hidden';
+      
+      const formData = new FormData(form);
+      
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+          status.className = 'font-pixel text-xs text-accent mt-pixel-2';
+          status.textContent = 'MESSAGE SENT SUCCESSFULLY!';
+          form.reset();
+        } else {
+          throw new Error(result.error || 'Failed to send message');
+        }
+      } catch (error) {
+        status.className = 'font-pixel text-xs text-neon mt-pixel-2';
+        status.textContent = 'ERROR: ' + (error as Error).message.toUpperCase();
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'SEND MESSAGE';
+      }
+    });
+  });
+</script>

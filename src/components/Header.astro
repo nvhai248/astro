@@ -1,0 +1,76 @@
+---
+---
+
+<header class="bg-primary border-b-2 border-accent sticky top-0 z-50">
+  <nav class="container mx-auto px-4 py-pixel-2" role="navigation" aria-label="Main navigation">
+    <div class="flex justify-between items-center">
+      <a href="/" class="font-pixel text-accent text-sm hover:text-neon transition-colors" aria-label="Home">
+        &gt; PORTFOLIO_
+      </a>
+      
+      <div class="hidden md:flex space-x-pixel-3">
+        <a href="/" class="nav-link">HOME</a>
+        <a href="/about" class="nav-link">ABOUT</a>
+        <a href="/projects" class="nav-link">PROJECTS</a>
+        <a href="/certificates" class="nav-link">CERTIFICATES</a>
+        <a href="/blog" class="nav-link">BLOG</a>
+        <a href="/contact" class="nav-link">CONTACT</a>
+      </div>
+      
+      <!-- Mobile menu button -->
+      <button 
+        id="mobile-menu-btn" 
+        class="md:hidden pixel-button bg-accent text-primary px-2 py-1 text-xs font-pixel"
+        aria-label="Toggle mobile menu"
+        aria-expanded="false"
+      >
+        MENU
+      </button>
+    </div>
+    
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden mt-pixel-2 border-t border-gray-pixel pt-pixel-2">
+      <div class="flex flex-col space-y-pixel">
+        <a href="/" class="nav-link">HOME</a>
+        <a href="/about" class="nav-link">ABOUT</a>
+        <a href="/projects" class="nav-link">PROJECTS</a>
+        <a href="/certificates" class="nav-link">CERTIFICATES</a>
+        <a href="/blog" class="nav-link">BLOG</a>
+        <a href="/contact" class="nav-link">CONTACT</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<style>
+  .nav-link {
+    @apply font-pixel text-xs text-secondary hover:text-accent transition-colors duration-100;
+    text-decoration: none;
+  }
+  
+  .nav-link:hover {
+    text-shadow: 0 0 4px currentColor;
+  }
+</style>
+
+<script>
+  // Mobile menu toggle
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  
+  if (mobileMenuBtn && mobileMenu) {
+    mobileMenuBtn.addEventListener('click', () => {
+      const isHidden = mobileMenu.classList.contains('hidden');
+      
+      if (isHidden) {
+        mobileMenu.classList.remove('hidden');
+        mobileMenuBtn.setAttribute('aria-expanded', 'true');
+        mobileMenuBtn.textContent = 'CLOSE';
+      } else {
+        mobileMenu.classList.add('hidden');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        mobileMenuBtn.textContent = 'MENU';
+      }
+    });
+  }
+</script>

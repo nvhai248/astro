@@ -1,0 +1,130 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PixelCard from '../components/PixelCard.astro';
+import { getProjects, getBlogPosts } from '../lib/notion';
+
+const featuredProjects = (await getProjects()).filter(p => p.featured).slice(0, 3);
+const recentBlogs = (await getBlogPosts()).slice(0, 3);
+---
+
+<Layout title="Portfolio & Blog - Home">
+  <div class="min-h-screen flex flex-col">
+    <Header />
+    
+    <main class="flex-1">
+      <!-- Hero Section -->
+      <section class="py-pixel-4 md:py-16 px-4" aria-labelledby="hero-heading">
+        <div class="container mx-auto text-center">
+          <h1 id="hero-heading" class="font-pixel text-lg md:text-2xl text-accent mb-pixel-3 animate-slide-up">
+            &gt; WELCOME TO MY DIGITAL SPACE_
+          </h1>
+          <p class="font-mono text-gray-light text-base md:text-lg mb-pixel-4 max-w-2xl mx-auto animate-slide-up">
+            Full-stack developer passionate about creating pixel-perfect digital experiences. 
+            Specialized in modern web technologies and clean, accessible code.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-pixel-2 justify-center animate-slide-up">
+            <a 
+              href="/projects" 
+              class="pixel-button bg-accent text-primary font-pixel text-xs px-pixel-3 py-pixel-2 border-2 border-accent inline-block"
+            >
+              VIEW PROJECTS
+            </a>
+            <a 
+              href="/contact" 
+              class="pixel-button bg-transparent text-accent font-pixel text-xs px-pixel-3 py-pixel-2 border-2 border-accent inline-block"
+            >
+              GET IN TOUCH
+            </a>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Featured Projects -->
+      <section class="py-pixel-4 px-4 border-t-2 border-gray-pixel" aria-labelledby="featured-projects">
+        <div class="container mx-auto">
+          <h2 id="featured-projects" class="font-pixel text-base text-accent mb-pixel-3 text-center">
+            &gt; FEATURED PROJECTS_
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-pixel-3">
+            {featuredProjects.map(project => (
+              <PixelCard 
+                title={project.title}
+                description={project.description}
+                image={project.image}
+                category={project.category}
+                date={project.date}
+                href={`/projects/${project.id}`}
+                featured={project.featured}
+              />
+            ))}
+          </div>
+          <div class="text-center mt-pixel-4">
+            <a 
+              href="/projects" 
+              class="pixel-button bg-transparent text-accent font-pixel text-xs px-pixel-3 py-pixel-2 border-2 border-accent inline-block"
+            >
+              VIEW ALL PROJECTS
+            </a>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Recent Blogs -->
+      <section class="py-pixel-4 px-4 border-t-2 border-gray-pixel" aria-labelledby="recent-blogs">
+        <div class="container mx-auto">
+          <h2 id="recent-blogs" class="font-pixel text-base text-accent mb-pixel-3 text-center">
+            &gt; RECENT BLOG POSTS_
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-pixel-3">
+            {recentBlogs.map(blog => (
+              <PixelCard 
+                title={blog.title}
+                description={blog.excerpt}
+                image={blog.image}
+                category={blog.category}
+                date={blog.date}
+                href={`/blog/${blog.id}`}
+              />
+            ))}
+          </div>
+          <div class="text-center mt-pixel-4">
+            <a 
+              href="/blog" 
+              class="pixel-button bg-transparent text-accent font-pixel text-xs px-pixel-3 py-pixel-2 border-2 border-accent inline-block"
+            >
+              READ ALL POSTS
+            </a>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Skills Preview -->
+      <section class="py-pixel-4 px-4 border-t-2 border-gray-pixel" aria-labelledby="skills-preview">
+        <div class="container mx-auto text-center">
+          <h2 id="skills-preview" class="font-pixel text-base text-accent mb-pixel-3">
+            &gt; CORE SKILLS_
+          </h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-pixel-2 max-w-2xl mx-auto">
+            {['JAVASCRIPT', 'TYPESCRIPT', 'REACT', 'NODE.JS', 'PYTHON', 'ASTRO', 'TAILWIND', 'GIT'].map(skill => (
+              <div class="bg-gray-dark border border-gray-pixel p-pixel-2 hover:border-accent transition-colors">
+                <span class="font-pixel text-xs text-secondary">{skill}</span>
+              </div>
+            ))}
+          </div>
+          <div class="mt-pixel-4">
+            <a 
+              href="/about" 
+              class="pixel-button bg-transparent text-accent font-pixel text-xs px-pixel-3 py-pixel-2 border-2 border-accent inline-block"
+            >
+              LEARN MORE ABOUT ME
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+    
+    <Footer />
+  </div>
+</Layout>

@@ -1,0 +1,23 @@
+{
+  "name": "@example/basics",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/node": "^9.4.0",
+    "@astrojs/tailwind": "^6.0.2",
+    "@notionhq/client": "^4.0.1",
+    "@types/nodemailer": "^6.4.17",
+    "astro": "^5.2.5",
+    "autoprefixer": "^10.4.21",
+    "nodemailer": "^7.0.5",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17"
+  }
+}

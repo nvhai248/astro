@@ -1,0 +1,60 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PixelCard from '../components/PixelCard.astro';
+import FilterTabs from '../components/FilterTabs.astro';
+import { getProjects } from '../lib/notion';
+
+const projects = await getProjects();
+const categories = [...new Set(projects.map(p => p.category).filter(Boolean))];
+---
+
+<Layout title="Projects - Portfolio" description="Explore my portfolio of web development, AI/ML, and open source projects">
+  <div class="min-h-screen flex flex-col">
+    <Header />
+    
+    <main class="flex-1 py-pixel-4 px-4">
+      <div class="container mx-auto">
+        <h1 class="font-pixel text-lg md:text-2xl text-accent mb-pixel-4 text-center">
+          &gt; PROJECTS_
+        </h1>
+        
+        <p class="font-mono text-gray-light text-center mb-pixel-4 max-w-2xl mx-auto">
+          A collection of projects showcasing my skills in web development, 
+          machine learning, and open source contributions.
+        </p>
+        
+        <!-- Filter Tabs -->
+        <FilterTabs categories={categories} />
+        
+        <!-- Projects Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-pixel-3" id="projects-grid">
+          {projects.map(project => (
+            <div data-category={project.category}>
+              <PixelCard 
+                title={project.title}
+                description={project.description}
+                image={project.image}
+                category={project.category}
+                date={project.date}
+                href={`/projects/${project.id}`}
+                featured={project.featured}
+              />
+            </div>
+          ))}
+        </div>
+        
+        {projects.length === 0 && (
+          <div class="text-center py-pixel-4">
+            <p class="font-pixel text-gray-pixel text-xs">
+              NO PROJECTS FOUND. CHECK NOTION INTEGRATION.
+            </p>
+          </div>
+        )}
+      </div>
+    </main>
+    
+    <Footer />
+  </div>
+</Layout>

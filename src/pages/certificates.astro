@@ -1,0 +1,58 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PixelCard from '../components/PixelCard.astro';
+import FilterTabs from '../components/FilterTabs.astro';
+import { getCertificates } from '../lib/notion';
+
+const certificates = await getCertificates();
+const categories = [...new Set(certificates.map(c => c.category).filter(Boolean))];
+---
+
+<Layout title="Certificates - Portfolio" description="View my professional certificates in cloud computing, development, and soft skills">
+  <div class="min-h-screen flex flex-col">
+    <Header />
+    
+    <main class="flex-1 py-pixel-4 px-4">
+      <div class="container mx-auto">
+        <h1 class="font-pixel text-lg md:text-2xl text-accent mb-pixel-4 text-center">
+          &gt; CERTIFICATES_
+        </h1>
+        
+        <p class="font-mono text-gray-light text-center mb-pixel-4 max-w-2xl mx-auto">
+          Professional certifications and achievements in various technology domains.
+        </p>
+        
+        <!-- Filter Tabs -->
+        <FilterTabs categories={categories} />
+        
+        <!-- Certificates Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-pixel-3" id="certificates-grid">
+          {certificates.map(cert => (
+            <div data-category={cert.category}>
+              <PixelCard 
+                title={cert.title}
+                description={`${cert.issuer} • ${cert.level}`}
+                image={cert.image}
+                category={cert.category}
+                date={cert.date}
+                href={cert.url}
+              />
+            </div>
+          ))}
+        </div>
+        
+        {certificates.length === 0 && (
+          <div class="text-center py-pixel-4">
+            <p class="font-pixel text-gray-pixel text-xs">
+              NO CERTIFICATES FOUND. CHECK NOTION INTEGRATION.
+            </p>
+          </div>
+        )}
+      </div>
+    </main>
+    
+    <Footer />
+  </div>
+</Layout>

@@ -1,0 +1,86 @@
+---
+export interface Props {
+  categories: string[];
+  activeCategory?: string;
+}
+
+const { categories, activeCategory = 'ALL' } = Astro.props;
+---
+
+<div class="flex flex-wrap gap-pixel mb-pixel-4" role="tablist" aria-label="Filter categories">
+  <button 
+    class={`filter-tab ${activeCategory === 'ALL' ? 'active' : ''}`}
+    data-category="ALL"
+    role="tab"
+    aria-selected={activeCategory === 'ALL'}
+  >
+    ALL
+  </button>
+  {categories.map(category => (
+    <button 
+      class={`filter-tab ${activeCategory === category ? 'active' : ''}`}
+      data-category={category}
+      role="tab"
+      aria-selected={activeCategory === category}
+    >
+      {category.toUpperCase()}
+    </button>
+  ))}
+</div>
+
+<style>
+  .filter-tab {
+    @apply font-pixel text-xs px-pixel-2 py-pixel bg-gray-dark border-2 border-gray-pixel text-gray-light;
+    @apply hover:border-accent hover:text-accent transition-all duration-200;
+    image-rendering: pixelated;
+  }
+  
+  .filter-tab.active {
+    @apply bg-accent text-primary border-accent;
+  }
+  
+  .filter-tab:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 2px 2px 0 rgba(0, 255, 65, 0.3);
+  }
+  
+  .filter-tab.active:hover {
+    box-shadow: 2px 2px 0 rgba(255, 7, 58, 0.3);
+  }
+</style>
+
+<script>
+  // Filter functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const filterableItems = document.querySelectorAll('[data-category]');
+    
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const category = tab.getAttribute('data-category');
+        
+        // Update active tab
+        filterTabs.forEach(t => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+        
+        // Filter items
+        filterableItems.forEach(item => {
+          const itemCategory = item.getAttribute('data-category');
+          const shouldShow = category === 'ALL' || itemCategory === category;
+          
+          if (shouldShow) {
+            item.style.display = 'block';
+            item.classList.add('animate-pixel-fade');
+          } else {
+            item.style.display = 'none';
+            item.classList.remove('animate-pixel-fade');
+          }
+        });
+      });
+    });
+  });
+</script>

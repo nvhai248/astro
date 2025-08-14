@@ -1,0 +1,140 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getAboutContent } from '../lib/notion';
+
+const aboutContent = await getAboutContent();
+---
+
+<Layout title="About Me - Portfolio" description="Learn more about my background, skills, and experience">
+  <div class="min-h-screen flex flex-col">
+    <Header />
+    
+    <main class="flex-1 py-pixel-4 px-4">
+      <div class="container mx-auto max-w-4xl">
+        <h1 class="font-pixel text-lg md:text-2xl text-accent mb-pixel-4 text-center">
+          &gt; ABOUT ME_
+        </h1>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-pixel-4">
+          <!-- Profile Section -->
+          <div class="lg:col-span-1">
+            <div class="pixel-card p-pixel-3 mb-pixel-3">
+              <div class="w-32 h-32 mx-auto bg-gray-dark border-2 border-gray-pixel mb-pixel-2 overflow-hidden">
+                <img 
+                  src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=400" 
+                  alt="Profile picture"
+                  class="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <h2 class="font-pixel text-sm text-secondary text-center mb-pixel">
+                DEVELOPER
+              </h2>
+              <p class="font-mono text-gray-light text-sm text-center">
+                Crafting digital experiences with passion and precision
+              </p>
+            </div>
+            
+            <!-- CV Download -->
+            <div class="pixel-card p-pixel-3">
+              <h3 class="font-pixel text-xs text-accent mb-pixel-2">
+                &gt; DOWNLOAD CV_
+              </h3>
+              <a 
+                href="/cv.pdf" 
+                download
+                class="pixel-button bg-neon text-secondary font-pixel text-xs px-pixel-2 py-pixel border-2 border-neon w-full text-center block"
+                aria-label="Download CV as PDF"
+              >
+                DOWNLOAD PDF
+              </a>
+            </div>
+          </div>
+          
+          <!-- Content Section -->
+          <div class="lg:col-span-2 space-y-pixel-3">
+            <!-- Bio -->
+            <div class="pixel-card p-pixel-3">
+              <h2 class="font-pixel text-sm text-accent mb-pixel-2">
+                &gt; BIO_
+              </h2>
+              <div class="font-mono text-gray-light text-sm space-y-pixel-2">
+                <p>
+                  Hello! I'm a passionate full-stack developer with expertise in modern web technologies. 
+                  I love creating pixel-perfect user interfaces and robust backend systems that solve real-world problems.
+                </p>
+                <p>
+                  My journey in programming started with curiosity about how websites work, and it has evolved 
+                  into a deep appreciation for clean code, user experience, and continuous learning.
+                </p>
+                <p>
+                  When I'm not coding, you can find me exploring new technologies, contributing to open source, 
+                  or sharing knowledge through blog posts and community engagement.
+                </p>
+              </div>
+            </div>
+            
+            <!-- Skills -->
+            <div class="pixel-card p-pixel-3">
+              <h2 class="font-pixel text-sm text-accent mb-pixel-2">
+                &gt; TECHNICAL SKILLS_
+              </h2>
+              <div class="grid grid-cols-2 md:grid-cols-3 gap-pixel-2">
+                {[
+                  'JavaScript', 'TypeScript', 'React', 'Vue.js', 'Astro', 'Node.js',
+                  'Python', 'PostgreSQL', 'MongoDB', 'Docker', 'AWS', 'Git', 'Test'
+                ].map(skill => (
+                  <div class="bg-gray-dark border border-gray-pixel p-pixel text-center">
+                    <span class="font-pixel text-xs text-secondary">{skill}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <!-- Experience -->
+            <div class="pixel-card p-pixel-3">
+              <h2 class="font-pixel text-sm text-accent mb-pixel-2">
+                &gt; EXPERIENCE_
+              </h2>
+              <div class="space-y-pixel-3">
+                <div class="border-l-2 border-accent pl-pixel-2">
+                  <h3 class="font-pixel text-xs text-secondary">SENIOR DEVELOPER</h3>
+                  <p class="font-mono text-gray-pixel text-xs">2022 - PRESENT</p>
+                  <p class="font-mono text-gray-light text-sm mt-pixel">
+                    Leading development of complex web applications and mentoring junior developers.
+                  </p>
+                </div>
+                <div class="border-l-2 border-gray-pixel pl-pixel-2">
+                  <h3 class="font-pixel text-xs text-secondary">FULL-STACK DEVELOPER</h3>
+                  <p class="font-mono text-gray-pixel text-xs">2020 - 2022</p>
+                  <p class="font-mono text-gray-light text-sm mt-pixel">
+                    Built scalable web applications using modern frameworks and cloud technologies.
+                  </p>
+                </div>
+                <div class="border-l-2 border-gray-pixel pl-pixel-2">
+                  <h3 class="font-pixel text-xs text-secondary">FRONTEND DEVELOPER</h3>
+                  <p class="font-mono text-gray-pixel text-xs">2018 - 2020</p>
+                  <p class="font-mono text-gray-light text-sm mt-pixel">
+                    Specialized in creating responsive, accessible user interfaces.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <Footer />
+  </div>
+</Layout>
+
+<style>
+  .pixel-card {
+    @apply bg-primary border-2 border-gray-pixel;
+    image-rendering: pixelated;
+    box-shadow: 4px 4px 0 rgba(128, 128, 128, 0.3);
+  }
+</style>
